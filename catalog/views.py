@@ -19,7 +19,7 @@ from .models import (
 )
 from .forms import AddressForm, CouponForm, RefundForm,CustomerProfileForm,CreditCardForm
 import json
-import stripe
+# import stripe
 import string
 import random
 import smtplib
@@ -386,132 +386,133 @@ class creditcard(View):
 
 
 class PaymentView(View):
-    def get(self, *args, **kwargs):
-        try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            if order.address is not None:
-                context = {
-                    'order': order,
-                    'DISPLAY_COUPON_FORM': False
-                }
-                return render(self.request, 'pay.html', context)
-            else:
-                messages.info(
-                    self.request, "Please provide a shipping address")
-                return redirect('checkout')
-        except ObjectDoesNotExist:
-            messages.info(self.request, "You don't have an active order")
-            return redirect('order_summary')
+    pass
+#     def get(self, *args, **kwargs):
+#         try:
+#             order = Order.objects.get(user=self.request.user, ordered=False)
+#             if order.address is not None:
+#                 context = {
+#                     'order': order,
+#                     'DISPLAY_COUPON_FORM': False
+#                 }
+#                 return render(self.request, 'pay.html', context)
+#             else:
+#                 messages.info(
+#                     self.request, "Please provide a shipping address")
+#                 return redirect('checkout')
+#         except ObjectDoesNotExist:
+#             messages.info(self.request, "You don't have an active order")
+#             return redirect('order_summary')
 
-    def post(self, *args, **kwargs):
-        to_email = self.request.user.email
-        print('customer email -->', to_email)
-        order = Order.objects.get(user=self.request.user, ordered=False)
-        try:
-            customer = stripe.Customer.create(
-                name=self.request.user,
-                email=self.request.user.email,
-                source=self.request.POST['stripeToken']
+#     def post(self, *args, **kwargs):
+#         to_email = self.request.user.email
+#         print('customer email -->', to_email)
+#         order = Order.objects.get(user=self.request.user, ordered=False)
+#         try:
+#             customer = stripe.Customer.create(
+#                 name=self.request.user,
+#                 email=self.request.user.email,
+#                 source=self.request.POST['stripeToken']
 
-            )
-            amount = int(order.get_total() * 100)
-            charge = stripe.Charge.create(
-                amount=amount,
-                currency="usd",
-                customer=customer,
-                description="My first own test"
-            )
-            payment = Payment()
-            payment.charge_id = charge['id']
-            payment.user = self.request.user
-            payment.amount = order.get_total()
-            payment.save()
+#             )
+#             amount = int(order.get_total() * 100)
+#             charge = stripe.Charge.create(
+#                 amount=amount,
+#                 currency="usd",
+#                 customer=customer,
+#                 description="My first own test"
+#             )
+#             payment = Payment()
+#             payment.charge_id = charge['id']
+#             payment.user = self.request.user
+#             payment.amount = order.get_total()
+#             payment.save()
 
-            order_items = order.items.all()
-            order_items.update(ordered=True)
-            for item in order_items:
-                print(item.item.title)
-                print(item.item.discount_price)
-                item.save()
+#             order_items = order.items.all()
+#             order_items.update(ordered=True)
+#             for item in order_items:
+#                 print(item.item.title)
+#                 print(item.item.discount_price)
+#                 item.save()
 
-            order.ordered = True
-            order.payment = payment
-            order.ref_code = create_ref_code()
-            order.save()
+#             order.ordered = True
+#             order.payment = payment
+#             order.ref_code = create_ref_code()
+#             order.save()
 
-            msg = EmailMessage()
-            msg['Subject'] = f'Your order{item.item.title}'
-            msg['From'] = "ONlineTech Online <shifttry42@gmail@gmail.com>"
-            msg['To'] = to_email
-            msg.set_content(
-                f"Testing{item.item.title} for {item.item.discount_price} to be shipped to {order.address.street_address} the new feature of buteks online {item.item.image.url}")
+#             msg = EmailMessage()
+#             msg['Subject'] = f'Your order{item.item.title}'
+#             msg['From'] = "ONlineTech Online <shifttry42@gmail@gmail.com>"
+#             msg['To'] = to_email
+#             msg.set_content(
+#                 f"Testing{item.item.title} for {item.item.discount_price} to be shipped to {order.address.street_address} the new feature of buteks online {item.item.image.url}")
 
-            msg.add_alternative(
-                """
-                <!DOCTYPE html>
-                <html lang="en">
-                    <body>
-                        <h1 style="color:gray;">Helloh</h1>
-                        <img src='catalog/img.jpg' alt="itemimg">
-                    </body>
-                </html>
-                """
-            , subtype='html')
+#             msg.add_alternative(
+#                 """
+#                 <!DOCTYPE html>
+#                 <html lang="en">
+#                     <body>
+#                         <h1 style="color:gray;">Helloh</h1>
+#                         <img src='catalog/img.jpg' alt="itemimg">
+#                     </body>
+#                 </html>
+#                 """
+#             , subtype='html')
 
-            with open(f'media/{item.item.image}', 'rb') as f:
-                file_data = f.read()
-                file_type = imghdr.what(f.name)
-                file_name = f.name
+#             with open(f'media/{item.item.image}', 'rb') as f:
+#                 file_data = f.read()
+#                 file_type = imghdr.what(f.name)
+#                 file_name = f.name
 
-            msg.add_attachment(file_data, maintype='image',
-                               subtype=file_type, filename=file_name)
+#             msg.add_attachment(file_data, maintype='image',
+#                                subtype=file_type, filename=file_name)
 
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-                username = ""
-                password = ""
-                smtp.login(username, password)
+#             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+#                 username = ""
+#                 password = ""
+#                 smtp.login(username, password)
 
-                smtp.send_message(msg)
+#                 smtp.send_message(msg)
 
-            messages.success(
-                self.request, 'Your payment was successful. Go to you profile to view the deilvery status')
-            return redirect('home')
+#             messages.success(
+#                 self.request, 'Your payment was successful. Go to you profile to view the deilvery status')
+#             return redirect('home')
 
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get('error', {})
-            messages.info(self.request, f"{err.get('message')}")
-            return redirect('/')
-        except stripe.error.RateLimitError as e:
-            # Too many requests made to the API too quickly
-            messages.info(self.request, "Rate limit error")
-            return redirect('/')
-        except stripe.error.InvalidRequestError as e:
-            # Invalid parameters were supplied to Stripe's API
-            messages.info(self.request, "Invalid parameters")
-            return redirect('/')
-        except stripe.error.AuthenticationError as e:
-            # Authentication with Stripe's API failed
-            # (maybe you changed API keys recently)
-            messages.info(self.request, "Not authenticated")
-            return redirect('/')
-        except stripe.error.APIConnectionError as e:
-            # Network communication with Stripe failed
-            messages.info(
-                self.request, "Connection error...Please check your connection")
-            return redirect('/')
-        except stripe.error.StripeError as e:
-            # Display a very generic error to the user, and maybe send
-            # yourself an email
-            messages.info(
-                self.request, "Something went wrong, You were not charged. Please try again")
-            return redirect('/')
-        except Exception as e:
-            # Send an e-mail to ourselves
-            print(e)
-            messages.info(
-                self.request, "A serious error occurred, We were notified and are handling it.")
-            return redirect('/')
+#         except stripe.error.CardError as e:
+#             body = e.json_body
+#             err = body.get('error', {})
+#             messages.info(self.request, f"{err.get('message')}")
+#             return redirect('/')
+#         except stripe.error.RateLimitError as e:
+#             # Too many requests made to the API too quickly
+#             messages.info(self.request, "Rate limit error")
+#             return redirect('/')
+#         except stripe.error.InvalidRequestError as e:
+#             # Invalid parameters were supplied to Stripe's API
+#             messages.info(self.request, "Invalid parameters")
+#             return redirect('/')
+#         except stripe.error.AuthenticationError as e:
+#             # Authentication with Stripe's API failed
+#             # (maybe you changed API keys recently)
+#             messages.info(self.request, "Not authenticated")
+#             return redirect('/')
+#         except stripe.error.APIConnectionError as e:
+#             # Network communication with Stripe failed
+#             messages.info(
+#                 self.request, "Connection error...Please check your connection")
+#             return redirect('/')
+#         except stripe.error.StripeError as e:
+#             # Display a very generic error to the user, and maybe send
+#             # yourself an email
+#             messages.info(
+#                 self.request, "Something went wrong, You were not charged. Please try again")
+#             return redirect('/')
+#         except Exception as e:
+#             # Send an e-mail to ourselves
+#             print(e)
+#             messages.info(
+#                 self.request, "A serious error occurred, We were notified and are handling it.")
+#             return redirect('/')
 
 
 class OrderSummaryView(LoginRequiredMixin, View):
@@ -729,8 +730,8 @@ def terms(request):
     return render(request,'help_content/termsandconditions.html')     
 
 @login_required
-def add_to_cart(request, slug):
-    item = get_object_or_404(Item, slug=slug)
+def add_to_cart(request, pk):
+    item = get_object_or_404(Item, pk=pk)
     order_item, created = OrderItem.objects.get_or_create(
         item=item,
         user=request.user,
@@ -739,7 +740,7 @@ def add_to_cart(request, slug):
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(item__pk=item.pk).exists():
             order_item.quantity += 1
             order_item.save()
             messages.success(request, f"{item}'s quantity was updated")
@@ -758,12 +759,12 @@ def add_to_cart(request, slug):
 
 
 @login_required
-def remove_single_from_cart(request, slug):
-    item = get_object_or_404(Item, slug=slug)
+def remove_single_from_cart(request, pk):
+    item = get_object_or_404(Item, pk=pk)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(item__pk=item.pk).exists():
             order_item = OrderItem.objects.filter(
                 item=item,
                 user=request.user,
@@ -779,19 +780,19 @@ def remove_single_from_cart(request, slug):
 
         else:
             messages.success(request, f"{item} was not in your cart")
-            return redirect('detail', slug=slug)
+            return redirect('detail', pk=pk)
     else:
         messages.success(request, "You do not have an active order")
-        return redirect('detail', slug=slug)
+        return redirect('detail', pk=pk)
 
 
 @login_required
-def remove_from_cart(request, slug):
-    item = get_object_or_404(Item, slug=slug)
+def remove_from_cart(request, pk):
+    item = get_object_or_404(Item, pk=pk)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(item__pk=item.pk).exists():
             order_item = OrderItem.objects.filter(
                 item=item,
                 user=request.user,
@@ -803,10 +804,10 @@ def remove_from_cart(request, slug):
 
         else:
             messages.success(request, f"{item} was not in your cart")
-            return redirect('detail', slug=slug)
+            return redirect('detail', pk=pk)
     else:
         messages.success(request, "You do not have an active order")
-        return redirect('detail', slug=slug)
+        return redirect('detail', pk=pk)
 
 
 

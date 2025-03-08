@@ -83,7 +83,7 @@
       <div class="row">
         {% for item in Case %}
         <div class="col-4 col-md-4 col-lg-4 d-flex align-items-stretch mb-4">
-          <a href="{% url 'detail' item.slug %}">
+          <a href="{% url 'detail' item.pk %}">
                         {% if item.on_sale %}
               <h5><span class="label-right badge badge-primary" >Onsale</span></h5>
             {% endif %}

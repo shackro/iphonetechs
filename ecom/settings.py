@@ -1,18 +1,25 @@
 import os
-
+from pathlib import Path
 
 # STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 # USERNAME = config('USERNAME')
 # PASSWORD = config('PASSWORD')
 
+
+    
+    
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '+5v@@hv^37k3*#y4c0)h6s1yl*8)=)y=wd9$m%wtpbr6fnwl1e'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','.vercel.app']
+ALLOWED_HOSTS = ['*']
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -116,6 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MEDIA_URL = '/media/'

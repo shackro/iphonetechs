@@ -243,7 +243,15 @@ Profile</a>
           <!-- Grid column -->
         </div>
         <!-- Grid row  -->
+         
       </div>
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">
+        © 2024 Allrightsreserved:
+        <a> OnlineTech.com</a>
+      </div>
+      <!-- Copyright -->
+
 
           <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
       <div class="offcanvas-header">
@@ -272,37 +280,36 @@ Profile</a>
                 <h6 onclick="toggleAnswer('faq5')">5. How do I set up my Apple Watch with my iPhone?</h6>
                 <div id='faq5' style='display:none;'>To set up your Apple Watch, ensure Bluetooth is enabled on your iPhone and follow the prompts in the Apple Watch app on your device. For detailed setup instructions, visit the <a href='https://support.apple.com/en-us/HT204507'class="text-success">--->>>For more Inform</a>.</div> 
             </div> 
-            <div class='faq-item'>
-                <h6 onclick='toggleAnswer("faq6")'>6. How do I find the right case for my iPhone model?</h6> 
+            <div class="faq-item">
+              <h6 onclick='toggleAnswer("faq6")'>6. How do I find the right case for my iPhone model?</h6> 
                 <div id='faq6' style='display:none;'>Check the specifications of your iPhone model and choose a case that matches its dimensions and features. Refer to our detailed guide on compatibility at <a href='https://eu.pelacase.com/blogs/news/iphone-case-compatibility'class="text-success">--->>>For more Inform</a>.</div> 
              </div> 
-             <div class='faq-item'>
-                <h6 onclick='toggleAnswer("faq7")'>7. Can I use my Apple Watch without an iPhone?</h6> 
+             <div class="faq-item">
+              <h6 onclick='toggleAnswer("faq7")'>7. Can I use my Apple Watch without an iPhone?</h6> 
                 <div id='faq7' style='display:none;'>While some features require an iPhone, you can use your Apple Watch independently for fitness tracking and certain apps once it's set up with Wi-Fi or cellular service.</div> 
              </div> 
-             <div class='faq-item'>
-                <h6 onclick='toggleAnswer("faq8")'>8. What is the battery life of the latest iPhones?</h6> 
+             <div class="faq-item">
+              <h6 onclick='toggleAnswer("faq8")'>8. What is the battery life of the latest iPhones?</h6> 
                 <div id='faq8' style='display:none;'>The battery life varies by model; newer models typically offer longer usage times due to improved battery technology. For specifics on each model's battery life, see the official specifications on Apple's website.</p></p> 
              </div> 
-             <div class=' faq-item'> 
-                 <h6 onclick='toggleAnswer(" faq9")' style='cursor:pointer;'>9. How do I clean my iPhone screen safely?</h6> 
+             <div class="faq-item">
+              <h6 onclick='toggleAnswer(" faq9")' style='cursor:pointer;'>9. How do I clean my iPhone screen safely?</h6> 
                  <div id=' faq9' style='display:none;'>Use a microfiber cloth slightly dampened with water or a screen-safe cleaner to gently wipe the screen without damaging it.</div> 
              </div> 
-             <div class=' faq-item'> 
-                 <h6 onclick='toggleAnswer(" faq10")' style='cursor:pointer;'>10. What should I do if my Apple Watch is not syncing with my iPhone?</h6> 
+             <div class="faq-item">
+              <h6 onclick='toggleAnswer(" faq10")' style='cursor:pointer;'>10. What should I do if my Apple Watch is not syncing with my iPhone?</h6> 
                  <div id=' faq10' style='display:none;'>Ensure both devices are updated to the latest software version and that Bluetooth is enabled on your iPhone. Restart both devices if necessary.</div> 
              </div> 
+             <div class="faq-item">
+              <button class="btn-primary">
+              <a href="{% url 'subFQAs'%}"> For more FAQs --:></a></button>
+             </div>
          </div>  
     </div>
   </div>
       <!-- Footer Links -->
     
-      <!-- Copyright -->
-      <div class="footer-copyright text-center py-3">
-        © 2024 Allrightsreserved:
-        <a href="https://mdbootstrap.com/"> OnlineTech.com</a>
-      </div>
-      <!-- Copyright -->
+
     </footer>
 <script type='text/javascript'>
     function toggleAnswer(faqId) {

@@ -5,12 +5,6 @@ from .models import Customer
 import phonenumbers
 
 
-PAYMENT_CHOICES = (
-    ('S', 'Stripe'),
-    ('P', 'Paypal'),
-    ('M', 'M-pesa'),
-    ('C','creditcard')
-)
 
 class CreditCardForm(forms.Form):
     card_number = forms.CharField(max_length=16, label="Card Number")

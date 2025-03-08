@@ -74,8 +74,8 @@ urlpatterns = [
     path('track_order/', trackorder, name='track_order'),
     path('return_and_refund/', returnandrefund, name='return_and_refund'),
     path('shippingrates/', shippingrates, name='shippingrates'),
-    path('FQAs/', FQAs, name='FQAs'),
-    path('subFQAs/', FQAs2, name='subFQAs'),
+    path('FQAs1/', FQAs, name='FQAs'),
+    path('FQAs/', FQAs2, name='subFQAs'),
     path('subhelp1/', subhelp1, name='subhelp1'),
     
 
